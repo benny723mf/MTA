@@ -30,6 +30,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      flex: 1;
     }
 
     #message {
@@ -107,6 +108,18 @@
       color: #4caf50; /* Verde para destacar */
       margin-top: 20px;
     }
+
+    /* Footer styling */
+    footer {
+      background-color: #1f1f1f; /* Fondo oscuro del footer */
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 0.9em;
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+    }
   </style>
 </head>
 <body>
@@ -128,6 +141,11 @@
     <button onclick="thankUser()">Enter</button>
     <div id="thank-you-message">Muchas gracias, te mantendremos al tanto de la cuenta regresiva!!</div>
   </div>
+
+  <!-- Footer -->
+  <footer>
+    Copyright © 2025 El Mazal Tov de Armando - Todos los derechos, propiedad de BMF.
+  </footer>
 
   <script>
     // Configura la fecha objetivo
