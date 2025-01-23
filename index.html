@@ -111,14 +111,15 @@
 
     /* Footer styling */
     footer {
-      background-color: #1f1f1f; /* Fondo oscuro del footer */
-      color: white;
+      background-color: #1f1f1f; /* Dark background for contrast */
+      color: white; /* White text */
       text-align: center;
       padding: 10px 0;
       font-size: 0.9em;
       width: 100%;
-      position: absolute;
+      position: fixed; /* Sticks the footer to the bottom of the viewport */
       bottom: 0;
+      left: 0;
     }
   </style>
 </head>
@@ -148,8 +149,8 @@
   </footer>
 
   <script>
-    // Configura la fecha objetivo
-    const targetDate = new Date(2025, 10, 9, 17, 0, 0).getTime();
+    // Configura la fecha objetivo (October 11, 2025)
+    const targetDate = new Date(2025, 9, 11, 17, 0, 0).getTime(); // 9 = October in JavaScript
 
     function updateTimer() {
       const now = new Date().getTime();
