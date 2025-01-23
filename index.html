@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cuenta Regresiva</title>
+  <style>
+    :root {
+      --horizontal-movement: 90vw;
+      --vertical-movement: 60vh;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #282c34;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #timer-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #message {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    #timer {
+      font-size: 3em;
+    }
+
+    #moving-image {
+      position: absolute;
+      width: 10vw;
+      height: 10vw;
+      animation: moveAround 25s linear infinite;
+    }
+
+    @keyframes moveAround {
+      0% { top: 0; left: 0; }
+      25% { top: 0; left: var(--horizontal-movement); }
+      50% { top: var(--vertical-movement); left: var(--horizontal-movement); }
+      75% { top: var(--vertical-movement); left: 0; }
+      100% { top: 0; left: 0; }
+    }
+
+    /* Estilo del modal */
+    #modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 400px;
+      background: #1f1f1f; /* Fondo oscuro */
+      color: white; /* Texto claro */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      z-index: 1000; /* Asegura que se vea encima */
+    }
+
+    #modal input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #555;
+      border-radius: 5px;
+      font-size: 1em;
+      background: #282c34;
+      color: white;
+    }
+
+    #modal button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #modal button:hover {
+      background-color: #45a049;
+    }
+
+    /* Mensaje de agradecimiento */
+    #thank-you-message {
+      display: none;
+      font-size: 1.2em;
+      color: #4caf50; /* Verde para destacar */
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="timer-container">
+    <!-- Mensaje encima del contador -->
+    <div id="message">¡Ya casi empieza la música!!!</div>
+
+    <!-- Contador -->
+    <div id="timer"></div>
+
+    <!-- Imagen en movimiento -->
+    <img id="moving-image" src="Armando.jpg" alt="Imagen animada alrededor del contador" />
+  </div>
+
+  <!-- Modal para la suscripción -->
+  <div id="modal" onclick="event.stopPropagation();">
+    <p>Suscríbete para recibir actualizaciones mensuales!</p>
+    <input type="email" placeholder="Escribe tu correo aquí" id="email-input" />
+    <button onclick="thankUser()">Enter</button>
+    <div id="thank-you-message">Muchas gracias, te mantendremos al tanto de la cuenta regresiva!!</div>
+  </div>
+
+  <script>
+    // Configura la fecha objetivo
+    const targetDate = new Date(2025, 9, 11, 17, 0, 0).getTime();
+
+    function updateTimer() {
+      const now = new Date().getTime();
+      const timeRemaining = targetDate - now;
+
+      if (timeRemaining > 0) {
+        const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+        document.getElementById("timer").innerText = 
+          `${days} Días ${hours} Horas ${minutes} Minutos ${seconds} Segundos`;
+      } else {
+        document.getElementById("timer").innerText = "¡El tiempo ha llegado!";
+      }
+    }
+
+    // Variable para controlar si el modal debe eliminarse
+    let isModalShown = true;
+
+    // Muestra el modal al hacer clic en cualquier lugar de la pantalla
+    document.body.addEventListener('click', function () {
+      if (isModalShown) {
+        const modal = document.getElementById("modal");
+        modal.style.display = "flex";
+      } else {
+        hideModal();
+      }
+    });
+
+    // Muestra el mensaje de agradecimiento al dar clic en "Enter"
+    function thankUser() {
+      const thankYouMessage = document.getElementById("thank-you-message");
+      thankYouMessage.style.display = "block";
+      isModalShown = false; // Cambia el estado para ocultar el modal en el siguiente clic
+    }
+
+    // Oculta el modal
+    function hideModal() {
+      const modal = document.getElementById("modal");
+      modal.style.display = "none";
+    }
+
+    // Actualiza el timer cada segundo
+    setInterval(updateTimer, 1000);
+    updateTimer();
+  </script>
+</body>
+</html>
