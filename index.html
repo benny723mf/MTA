@@ -17,7 +17,7 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      background-color: #282c34;
+      background: linear-gradient(to bottom, #1e3c72, #2a5298); /* Gradient */
       color: white;
       font-family: Arial, sans-serif;
       text-align: center;
@@ -40,13 +40,26 @@
 
     #timer {
       font-size: 3em;
+      animation: pop 1s ease-in-out infinite; /* Timer animation */
+    }
+
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
     }
 
     #moving-image {
       position: absolute;
       width: 15vw;
       height: 15vw;
-      animation: moveAround 35s linear infinite;
+      animation: moveAround 35s linear infinite; /* Movement animation */
+      cursor: pointer;
+      transition: transform 0.3s ease; /* Smooth scaling */
+    }
+
+    #moving-image:hover {
+      transform: scale(1.1); /* Slightly enlarge on hover */
     }
 
     @keyframes moveAround {
@@ -57,7 +70,21 @@
       100% { top: 0; left: 0; }
     }
 
-    /* Estilo del modal */
+    /* Enlarged image styling */
+    #enlarged {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40vw;
+      height: 40vw;
+      z-index: 1000;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    /* Modal styling */
     #modal {
       position: fixed;
       top: 50%;
@@ -65,15 +92,15 @@
       transform: translate(-50%, -50%);
       width: 90%;
       max-width: 400px;
-      background: #1f1f1f; /* Fondo oscuro */
-      color: white; /* Texto claro */
+      background: rgba(31, 31, 31, 0.95);
+      color: white;
       padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
       display: none;
       flex-direction: column;
       align-items: center;
-      z-index: 1000; /* Asegura que se vea encima */
+      z-index: 1000;
     }
 
     #modal input {
@@ -101,23 +128,23 @@
       background-color: #45a049;
     }
 
-    /* Mensaje de agradecimiento */
+    /* Thank-you message styling */
     #thank-you-message {
       display: none;
       font-size: 1.2em;
-      color: #4caf50; /* Verde para destacar */
+      color: #4caf50;
       margin-top: 20px;
     }
 
     /* Footer styling */
     footer {
-      background-color: #1f1f1f; /* Dark background for contrast */
-      color: white; /* White text */
+      background-color: #1f1f1f;
+      color: white;
       text-align: center;
       padding: 10px 0;
       font-size: 0.9em;
       width: 100%;
-      position: fixed; /* Sticks the footer to the bottom of the viewport */
+      position: fixed;
       bottom: 0;
       left: 0;
     }
@@ -125,17 +152,20 @@
 </head>
 <body>
   <div id="timer-container">
-    <!-- Mensaje encima del contador -->
+    <!-- Countdown Message -->
     <div id="message">¡Ya casi empieza la música!!!</div>
 
-    <!-- Contador -->
+    <!-- Countdown Timer -->
     <div id="timer"></div>
 
-    <!-- Imagen en movimiento -->
-    <img id="moving-image" src="Armando.jpg" alt="Imagen animada alrededor del contador" />
+    <!-- Moving Image -->
+    <img id="moving-image" src="Armando.jpg" alt="Imagen animada" />
+
+    <!-- Enlarged Image -->
+    <img id="enlarged" src="Armando.jpg" alt="Imagen ampliada" onclick="toggleImage()" />
   </div>
 
-  <!-- Modal para la suscripción -->
+  <!-- Modal for Subscription -->
   <div id="modal" onclick="event.stopPropagation();">
     <p>Suscríbete para recibir actualizaciones mensuales!</p>
     <input type="email" placeholder="Escribe tu correo aquí" id="email-input" />
@@ -149,8 +179,8 @@
   </footer>
 
   <script>
-    // Configura la fecha objetivo (October 11, 2025)
-    const targetDate = new Date(2025, 9, 11, 17, 0, 0).getTime(); // 9 = October in JavaScript
+    // Set the target date (October 11, 2025)
+    const targetDate = new Date(2025, 9, 11, 17, 0, 0).getTime(); // JavaScript months are zero-based
 
     function updateTimer() {
       const now = new Date().getTime();
@@ -162,40 +192,46 @@
         const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
 
-        document.getElementById("timer").innerText = 
+        document.getElementById("timer").innerText =
           `${days} Días ${hours} Horas ${minutes} Minutos ${seconds} Segundos`;
       } else {
         document.getElementById("timer").innerText = "¡El tiempo ha llegado!";
       }
     }
 
-    // Variable para controlar si el modal debe eliminarse
-    let isModalShown = true;
+    // Toggle image between moving and enlarged states
+    let isEnlarged = false;
+    function toggleImage() {
+      const movingImage = document.getElementById("moving-image");
+      const enlargedImage = document.getElementById("enlarged");
 
-    // Muestra el modal al hacer clic en cualquier lugar de la pantalla
+      if (isEnlarged) {
+        enlargedImage.style.display = "none";
+        movingImage.style.display = "block";
+      } else {
+        movingImage.style.display = "none";
+        enlargedImage.style.display = "block";
+      }
+      isEnlarged = !isEnlarged;
+    }
+
+    // Show modal on any body click
+    let isModalShown = true;
     document.body.addEventListener('click', function () {
       if (isModalShown) {
         const modal = document.getElementById("modal");
         modal.style.display = "flex";
-      } else {
-        hideModal();
       }
     });
 
-    // Muestra el mensaje de agradecimiento al dar clic en "Enter"
+    // Show thank-you message on subscription
     function thankUser() {
       const thankYouMessage = document.getElementById("thank-you-message");
       thankYouMessage.style.display = "block";
-      isModalShown = false; // Cambia el estado para ocultar el modal en el siguiente clic
+      isModalShown = false;
     }
 
-    // Oculta el modal
-    function hideModal() {
-      const modal = document.getElementById("modal");
-      modal.style.display = "none";
-    }
-
-    // Actualiza el timer cada segundo
+    // Update timer every second
     setInterval(updateTimer, 1000);
     updateTimer();
   </script>
