@@ -17,7 +17,7 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      background: linear-gradient(to bottom, #1e3c72, #2a5298); /* Gradient */
+      background: linear-gradient(to bottom, #1e3c72, #2a5298);
       color: white;
       font-family: Arial, sans-serif;
       text-align: center;
@@ -40,7 +40,7 @@
 
     #timer {
       font-size: 3em;
-      animation: pop 1s ease-in-out infinite; /* Timer animation */
+      animation: pop 3s ease-in-out infinite; /* Slowed animation */
     }
 
     @keyframes pop {
@@ -53,13 +53,9 @@
       position: absolute;
       width: 15vw;
       height: 15vw;
-      animation: moveAround 35s linear infinite; /* Movement animation */
+      animation: moveAround 35s linear infinite;
       cursor: pointer;
       transition: transform 0.3s ease; /* Smooth scaling */
-    }
-
-    #moving-image:hover {
-      transform: scale(1.1); /* Slightly enlarge on hover */
     }
 
     @keyframes moveAround {
@@ -70,7 +66,6 @@
       100% { top: 0; left: 0; }
     }
 
-    /* Enlarged image styling */
     #enlarged {
       display: none;
       position: fixed;
@@ -128,7 +123,6 @@
       background-color: #45a049;
     }
 
-    /* Thank-you message styling */
     #thank-you-message {
       display: none;
       font-size: 1.2em;
@@ -136,7 +130,6 @@
       margin-top: 20px;
     }
 
-    /* Footer styling */
     footer {
       background-color: #1f1f1f;
       color: white;
@@ -152,20 +145,12 @@
 </head>
 <body>
   <div id="timer-container">
-    <!-- Countdown Message -->
     <div id="message">¡Ya casi empieza la música!!!</div>
-
-    <!-- Countdown Timer -->
     <div id="timer"></div>
-
-    <!-- Moving Image -->
-    <img id="moving-image" src="Armando.jpg" alt="Imagen animada" />
-
-    <!-- Enlarged Image -->
+    <img id="moving-image" src="Armando.jpg" alt="Imagen animada" onclick="toggleImage()" />
     <img id="enlarged" src="Armando.jpg" alt="Imagen ampliada" onclick="toggleImage()" />
   </div>
 
-  <!-- Modal for Subscription -->
   <div id="modal" onclick="event.stopPropagation();">
     <p>Suscríbete para recibir actualizaciones mensuales!</p>
     <input type="email" placeholder="Escribe tu correo aquí" id="email-input" />
@@ -173,14 +158,12 @@
     <div id="thank-you-message">Muchas gracias, te mantendremos al tanto de la cuenta regresiva!!</div>
   </div>
 
-  <!-- Footer -->
   <footer>
     Copyright © 2025 El Mazal Tov de Armando - Todos los derechos, propiedad de BMF.
   </footer>
 
   <script>
-    // Set the target date (October 11, 2025)
-    const targetDate = new Date(2025, 9, 11, 17, 0, 0).getTime(); // JavaScript months are zero-based
+    const targetDate = new Date(2025, 9, 11, 17, 0, 0).getTime();
 
     function updateTimer() {
       const now = new Date().getTime();
@@ -199,8 +182,26 @@
       }
     }
 
-    // Toggle image between moving and enlarged states
+    let isModalShown = true;
     let isEnlarged = false;
+
+    document.body.addEventListener('click', function () {
+      const modal = document.getElementById("modal");
+      const thankYouMessage = document.getElementById("thank-you-message");
+      if (isModalShown) {
+        modal.style.display = "flex";
+      } else {
+        modal.style.display = "none";
+        thankYouMessage.style.display = "none";
+      }
+    });
+
+    function thankUser() {
+      const thankYouMessage = document.getElementById("thank-you-message");
+      thankYouMessage.style.display = "block";
+      isModalShown = false;
+    }
+
     function toggleImage() {
       const movingImage = document.getElementById("moving-image");
       const enlargedImage = document.getElementById("enlarged");
@@ -215,23 +216,6 @@
       isEnlarged = !isEnlarged;
     }
 
-    // Show modal on any body click
-    let isModalShown = true;
-    document.body.addEventListener('click', function () {
-      if (isModalShown) {
-        const modal = document.getElementById("modal");
-        modal.style.display = "flex";
-      }
-    });
-
-    // Show thank-you message on subscription
-    function thankUser() {
-      const thankYouMessage = document.getElementById("thank-you-message");
-      thankYouMessage.style.display = "block";
-      isModalShown = false;
-    }
-
-    // Update timer every second
     setInterval(updateTimer, 1000);
     updateTimer();
   </script>
